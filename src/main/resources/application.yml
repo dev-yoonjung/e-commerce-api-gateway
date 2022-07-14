@@ -5,7 +5,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://127.0.0.1:8761/eureka
 spring:
   application:
     name: api-gateway-service
@@ -13,7 +13,9 @@ spring:
     gateway:
       routes:
         - id: user_service
-          uri: http://localhost:9001
+          uri: http://127.0.0.1:9001/
           predicates:
             - Path=/users/**
-
+          filters:
+            - AddRequestHeader=request-key, request-value
+            - AddResponseHeader=response-key, response-value
