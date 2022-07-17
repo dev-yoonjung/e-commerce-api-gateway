@@ -25,4 +25,9 @@ spring:
           filters:
             - AddRequestHeader=request-key, request-value
             - AddResponseHeader=response-key, response-value
-            - CustomFilter
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Hi, there.
+                preLogger: true
+                postLogger: true
