@@ -21,7 +21,7 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/users/**
+            - Path=/user-service/**
           filters:
             - AddRequestHeader=request-key, request-value
             - AddResponseHeader=response-key, response-value
@@ -32,6 +32,10 @@ spring:
                 preLogger: true
                 postLogger: true
         - id: catalog-service
-          uri: lb://catalog-SERVICE
+          uri: lb://CATALOG-SERVICE
           predicates:
-            - Path=/catalogs/**
+            - Path=/catalog-service/**
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/**
