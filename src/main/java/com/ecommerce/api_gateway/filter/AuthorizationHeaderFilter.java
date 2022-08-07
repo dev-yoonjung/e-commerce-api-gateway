@@ -1,7 +1,6 @@
 package com.ecommerce.api_gateway.filter;
 
 import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +37,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                     .getHeaders()
                     .get(HttpHeaders.AUTHORIZATION)
                     .get(0);
-            String jwt = authorizationHeader.replace("Bearer", "");
+            String jwt = authorizationHeader.replace("Bearer ", "");
             
             if (!isJwtValid(jwt)) {
                 return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
@@ -66,7 +65,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         String subject = null;
 
         try {
-            Jwts.parser()
+            subject = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(jwt)
                     .getBody()
