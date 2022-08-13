@@ -3,9 +3,9 @@ package com.ecommerce.api_gateway.filter;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -17,11 +17,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
-    @Value("${token.secret}")
-    private String secret;
+    private final Environment environment;
 
-    public AuthorizationHeaderFilter() {
+    public AuthorizationHeaderFilter(Environment environment) {
         super(Config.class);
+        this.environment = environment;
     }
 
     @Override
@@ -63,6 +63,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     private boolean isJwtValid(String jwt) {
         boolean result = false;
         String subject = null;
+        String secret = environment.getProperty("token.secret");
 
         try {
             subject = Jwts.parser()
